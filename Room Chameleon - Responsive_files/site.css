@@ -1,0 +1,519 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+body {
+	background: #222223;
+	font-family: Verdana, Geneva, sans-serif;
+	height: 100%;
+	overflow: hidden;
+	width: 100%;
+}
+
+section {
+	float: left;
+	position: relative;
+	overflow: hidden;
+}
+
+.hidden {
+	opacity: 0;
+}
+
+#sceneImage, #SVGwrapper, #loadingOverlay, svg, g, svg image, canvas {
+	position: absolute;
+}
+
+#pathCanvas, svg {
+	left: 0;
+	top: 0;
+}
+
+#SVGwrapper {
+	height: 800px;
+	width: 1000px;
+	left: 0;
+	top: 0;
+}
+
+.pathGroup path, .pathGroup polygon {
+	fill-opacity: 0.5;
+	opacity: 0;
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+}
+
+#roomScene, #swatches {
+	background: #222223;
+	height: 100%;
+	position: absolute;
+}
+
+#roomScene {
+	left: 26%;
+	margin: 0.5% 0 0 0;
+	width: 74%;
+}
+
+#swatches {
+	font-size: 0;
+	margin: 0.5% 0.5% 0 0.5%;
+	width: 25%;
+}
+
+#swatches img {
+    height: 100%;
+    width: 100%;
+}
+
+#swatches div {
+	display: inline-block;
+	height: 5.8%;
+	margin: 0 0.5% 1% 0;
+	width: 19.5%;
+	cursor: move;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#loadingOverlay {
+	background: #333334;
+	color: #fff;
+	z-index: 3;
+}
+
+.touchEnabled #roomScene, .touchEnabled #swatches, #loadingOverlay {
+	height: 100%;
+	margin: 0;
+	width: 100%;
+}
+.touchEnabled #swatches {
+	opacity: 0.5;
+    -webkit-transition: opacity 200ms 80ms, -webkit-transform 300ms ease;
+    -moz-transition: opacity 200ms 80ms, -moz-transform 300ms ease;
+    transition: opacity 200ms 80ms, -webkit-transform 300ms ease;
+	-moz-transform: translate3d(-100%, 0, 0);
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+	z-index: 2;
+}
+.touchEnabled #swatches div {
+	height: 12.4%;
+	margin: 0 0.1% 0.1% 0;
+	width: 9.9%;
+}
+.touchEnabled.expanded #swatches {
+	opacity: 1;
+	-moz-transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.touchEnabled #roomScene {
+	left: 0;
+}
+
+.touchEnabled #canvasWrapper, .touchEnabled #SVGwrapper, .touchEnabled #sceneImage {
+	left: 50%;
+	position: absolute;
+	top: 0;
+}
+
+#loadingOverlay {
+    -moz-transform: translate3d(0, -100%, 0);
+	-webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+}
+
+.initComplete #loadingOverlay {
+    -moz-transition: -moz-transform 150ms ease;
+	-webkit-transition: -webkit-transform 150ms ease;
+    transition: -transform 150ms ease;
+}
+
+.displayLoading #loadingOverlay {
+    -moz-transform: translate3d(0, 0, 0);
+	-webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+/* Animation keyframes - you need to add prefixes */
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+ 
+/* Loading animation container */
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10em;
+    height: 10em;
+    margin: -5em 0 0 -5em;
+}
+ 
+/* Spinning circle (inner circle) */
+.loading .maskedCircle {
+    width: 7.7em;
+    height: 7.7em;
+    border-radius: 7.7em;
+    border: 1em solid white;
+}
+ 
+/* Spinning circle mask */
+.loading .mask {
+    width: 4.6em;
+    height: 4.6em;
+    overflow: hidden;
+}
+ 
+/* Spinner */
+.loading .spinner {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    width: 10em;
+    height: 10em;
+    -moz-animation: spin 1s infinite linear;
+    -webkit-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+}
+
+.loading .media {
+    display: none;
+}
+
+.loading .media {
+    text-align: center;
+}
+
+.media p {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
+
+.loadingApp .loading {
+	display: block;
+    left: 0;
+    height: 100%;
+    margin: -170px auto 0;
+    text-align: center;
+    width: 100%;
+}
+
+.loadingApp .loading .media{
+	display: block;
+}
+
+.loadingApp .loading .spinner {
+	display: none;
+}
+
+@-webkit-keyframes pulse {
+	0% { opacity: 0; }
+	30% { opacity: 0; }
+	40% { opacity: 1; }
+	60% { opacity: 1; }
+	70% { opacity: 0; }
+	100% { opacity: 0; }
+}
+
+@-moz-keyframes pulse {
+    0% { opacity: 0; }
+	30% { opacity: 0; }
+	40% { opacity: 1; }
+	60% { opacity: 1; }
+	70% { opacity: 0; }
+	100% { opacity: 0; }
+}
+
+@keyframes pulse {
+    0% { opacity: 0; }
+	30% { opacity: 0; }
+	50% { opacity: 1; }
+	70% { opacity: 0; }
+	100% { opacity: 0; }
+}
+
+.singleTapIcon, .swipeIcon {
+	-moz-animation: pulse 5s infinite linear alternate;
+    -webkit-animation: pulse 5s infinite linear alternate;
+    animation: pulse 5s infinite linear alternate;
+	display: none;
+	fill-opacity: 1;
+    opacity: 1;
+    position: relative;
+    z-index: 999999;
+}
+
+/*.ico {
+	display: none;
+	-moz-animation: pulse 1s infinite linear alternate;
+    -webkit-animation: pulse 1s infinite linear alternate;
+    animation: pulse 1s infinite linear alternate;
+}
+
+.waitingTap .ico,
+.waitingTap .singleTapIcon,
+.waitingSwipe .ico,
+.waitingSwipe .swipeIcon
+{
+	display: block;
+}*/
+
+.waitingTap .ico,
+.waitingTap .singleTapIcon,
+.waitingSwipe .swipeIcon
+{
+	display: block;
+}
+
+#mobileLog {
+    color:#fff;
+}
+
+#pathCanvas4 {
+    left: 0;
+}
+
+@media only screen and (min-width : 0) and (max-width : 767px) {   /*touch - multiplier: 0.33*/
+	.touchEnabled #canvasWrapper, .touchEnabled #SVGwrapper, .touchEnabled #sceneImage {
+		margin-left: -165px;
+	}
+
+	#SVGwrapper {
+		height: 264px;
+	    width: 330px;
+	}
+
+	#sceneImage {
+		height: 264px;
+	    width: 330px;
+	}
+
+	#ceiling { 
+		height: 43px;
+	    width: 330px;
+	}
+	#centerWall {
+		height: 174px;
+	    width: 162px;
+	}
+	#rightWall {
+		height: 211px;
+	    width: 90px;
+	}
+	#leftWall {
+		height: 175px;
+	    width: 85px;
+	}
+	#pathCanvas {
+		height: 43px;
+	    width: 330px;
+	}
+	#pathCanvas2 {
+		height: 174px;
+	    left: 82px;
+	    top: 31px;
+	    width: 162px;
+	}
+	#pathCanvas3 {
+		height: 211px;
+	    left: 241px;
+	    top: 17px;
+	    width: 90px;
+	}
+	#pathCanvas4 {
+		height: 175px;
+	    top: 41px;
+	    width: 85px;
+	}
+}
+
+@media only screen and (min-width : 768px) and (max-width : 1023px) {   /*touch - multiplier: 0.525*/
+	.touchEnabled #canvasWrapper, .touchEnabled #SVGwrapper, .touchEnabled #sceneImage {
+		margin-left: -262px;
+	}
+
+	#SVGwrapper {
+		height: 420px;
+	    width: 525px;
+	}
+	#sceneImage {
+		height: 420px;
+	    width: 525px;
+	}
+	#ceiling { 
+		height: 68px;
+	    width: 525px;
+	}
+	#centerWall {
+		height: 276px;
+	    width: 257px;
+	}
+	#rightWall {
+		height: 335px;
+	    width: 142px;
+	}
+	#leftWall {
+		height: 277px;
+	    width: 135px;
+	}
+	#pathCanvas {
+		height: 68px;
+	    width: 525px;
+	}
+	#pathCanvas2 {
+		height: 276px;
+	    left: 130px;
+	    top: 48px;
+	    width: 257px;
+	}
+	#pathCanvas3 {
+		height: 335px;
+	    left: 383px;
+	    top: 28px;
+	    width: 142px;
+	}
+
+	#pathCanvas4 {
+		height: 277px;
+	    top: 66px;
+	    width: 135px;
+	}
+	
+}
+
+@media only screen and (min-width : 1024px) and (max-width : 1239px) {   /*touch - multiplier: 0.875*/
+	.touchEnabled #canvasWrapper, .touchEnabled #SVGwrapper, .touchEnabled #sceneImage {
+		margin-left: -437px;
+	}
+
+	#SVGwrapper {
+		height: 700px;
+	    width: 875px;
+	}
+	#sceneImage {
+		height: 700px;
+	    width: 875px;
+	}
+	#ceiling { 
+		height: 113px; /* multiplier * 129*/
+	    width: 875px; /* multiplier * 1000*/
+	}
+	#centerWall {
+		height: 461px; /* multiplier * 527*/
+	    width: 429px; /* multiplier * 490*/
+	}
+	#rightWall {
+		height: 558px; /* multiplier * 639*/
+	    width: 236px; /* multiplier * 273*/
+	}
+	#leftWall {
+		height: 462px; /* multiplier * 528*/
+	    width: 225px; /* multiplier * 257*/
+	}
+	#pathCanvas {
+		height: 113px;
+	    width: 875px;
+	}
+	#pathCanvas2 {
+		height: 461px;
+	    left: 217px; /* multiplier * 248*/
+	    top: 81px; /* multiplier * 93*/
+	    width: 429px;
+	}
+	#pathCanvas3 {
+		height: 558px;
+	    left: 639px; /* multiplier * 730*/
+	    top: 46px; /* multiplier * 53*/
+	    width: 236px;
+	}
+	#pathCanvas4 {
+		height: 462px;
+	    top: 110px; /* multiplier * 126*/
+	    width: 225px;
+	}
+}
+
+@media only screen and (min-width : 1240px) {
+	.touchEnabled #canvasWrapper, .touchEnabled #SVGwrapper, .touchEnabled #sceneImage {
+		margin-left: -500px;
+	}
+
+	#canvasWrapper, #SVGwrapper {
+		height: 800px;
+	    width: 1000px;
+	}
+	#sceneImage {
+		height: 800px;
+	    width: 1000px;
+	}
+	#ceiling { 
+		height: 129px;
+	    width: 1000px;
+	}
+	#centerWall {
+		height: 527px;
+	    width: 490px;
+	}
+	#rightWall {
+		height: 639px;
+	    width: 270px;
+	}
+	#leftWall {
+		height: 528px;
+	    width: 257px;
+	}
+	#pathCanvas {
+		height: 129px;
+	    width: 1000px;
+	}
+	#pathCanvas2 {
+		height: 527px;
+	    left: 248px;
+	    top: 93px;
+	    width: 490px;
+	}
+	#pathCanvas3 {
+		height: 639px;
+	    left: 730px;
+	    top: 53px;
+	    width: 270px;
+	}
+	#pathCanvas4 {
+		height: 528px;
+	    top: 126px;
+	    width: 257px;
+	}
+}
